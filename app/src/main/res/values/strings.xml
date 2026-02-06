@@ -1,0 +1,40 @@
+<resources>
+    <string name="app_name">DataDisplay</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <!-- General labels -->
+    <string name="soundtrack_title">Soundtrack Title</string>
+    <string name="duration_label">Duration: %1$s</string>
+    <string name="time_placeholder">00:00</string>
+
+    <!-- Content descriptions for accessibility -->
+    <string name="play_pause">Play or Pause</string>
+    <string name="loop">Loop</string>
+    <string name="shuffle">Shuffle</string>
+
+    <!-- Toast messages -->
+    <string name="looping_enabled">Looping enabled</string>
+    <string name="looping_disabled">Looping disabled</string>
+    <string name="shuffle_on">Shuffle mode ON</string>
+    <string name="shuffle_off">Shuffle mode OFF</string>
+    <string name="playback_error">Playback error</string>
+    <string name="shuffle_error">Shuffle error</string>
+    <string name="error_parsing_json">Error parsing mp3_data.json</string>
+    <string name="error_loading_categories">Error loading categories</string>
+    <string name="no_json_found">No mp3_data.json found in cache</string>
+
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="comic_page">Comic page</string>
+
+
+    <string name="unlock_zoom">Zoom</string>
+
+    <!-- Navigation header -->
+    <string name="nav_header_title">Data Display</string>
+    <string name="nav_header_subtitle">Content Management</string>
+    <string name="nav_header_desc">Navigation header</string>
+
+</resources>

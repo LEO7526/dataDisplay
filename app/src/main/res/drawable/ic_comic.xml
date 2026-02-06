@@ -1,0 +1,34 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="100dp"
+    android:height="24dp"
+    android:viewportWidth="100"
+    android:viewportHeight="24">
+
+    <!-- Stylized "Comic" text as paths -->
+    <group android:translateX="0" android:translateY="0">
+        <!-- C -->
+        <path
+            android:fillColor="#FF9800"
+            android:pathData="M5,5 L5,19 Q5,21 7,21 L13,21 Q15,21 15,19 L15,17 Q15,15 13,15 L9,15 Q7,15 7,13 L7,11 Q7,9 9,9 L13,9 Q15,9 15,7 L15,5 Q15,3 13,3 L7,3 Q5,3 5,5 Z" />
+
+        <!-- O -->
+        <path
+            android:fillColor="#FF9800"
+            android:pathData="M20,3 Q16,3 16,7 L16,17 Q16,21 20,21 L24,21 Q28,21 28,17 L28,7 Q28,3 24,3 L20,3 Z M20,7 L24,7 L24,17 L20,17 L20,7 Z" />
+
+        <!-- M -->
+        <path
+            android:fillColor="#FF9800"
+            android:pathData="M30,3 L30,21 L34,21 L34,9 L36,13 L38,9 L38,21 L42,21 L42,3 L38,3 L36,7 L34,3 L30,3 Z" />
+
+        <!-- I -->
+        <path
+            android:fillColor="#FF9800"
+            android:pathData="M45,3 L45,21 L49,21 L49,3 L45,3 Z" />
+
+        <!-- C -->
+        <path
+            android:fillColor="#FF9800"
+            android:pathData="M52,5 L52,19 Q52,21 54,21 L60,21 Q62,21 62,19 L62,17 Q62,15 60,15 L56,15 Q54,15 54,13 L54,11 Q54,9 56,9 L60,9 Q62,9 62,7 L62,5 Q62,3 60,3 L54,3 Q52,3 52,5 Z" />
+    </group>
+</vector>

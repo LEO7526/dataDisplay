@@ -1,0 +1,11 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- "Previous" icon: two triangles and a vertical bar -->
+    <path
+        android:fillColor="#000000"
+        android:pathData="M18,6L9.5,12L18,18V6zM6,6h2v12H6V6z"/>
+</vector>
