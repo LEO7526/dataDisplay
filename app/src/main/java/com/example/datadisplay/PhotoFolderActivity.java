@@ -9,9 +9,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.datadisplay.adapters.PhotoFolderAdapter;
+import com.example.datadisplay.managers.OfflineDownloadManager;
+import com.example.datadisplay.managers.OfflineResourceManager;
+import com.example.datadisplay.managers.OfflineResourceManager.ResourceType;
 import com.example.datadisplay.models.PhotoCategory;
 import com.example.datadisplay.models.PhotoData;
 import com.example.datadisplay.models.PhotoFolder;
+import com.example.datadisplay.utils.NetworkHelper;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
@@ -30,6 +34,9 @@ public class PhotoFolderActivity extends AppCompatActivity implements PhotoFolde
     private List<PhotoFolder> folderList = new ArrayList<>();
     private String categoryName;
     private String jsonPath;
+    
+    private OfflineDownloadManager downloadManager;
+    private OfflineResourceManager resourceManager;
     private RecyclerView recyclerView;
 
     @Override
@@ -40,6 +47,10 @@ public class PhotoFolderActivity extends AppCompatActivity implements PhotoFolde
         recyclerView = findViewById(R.id.folderRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        
+        // Initialize download managers
+        downloadManager = new OfflineDownloadManager(this);
+        resourceManager = new OfflineResourceManager(this);
         categoryName = getIntent().getStringExtra("category_name");
         jsonPath = getIntent().getStringExtra("json_path");
         String folderName = getIntent().getStringExtra("folder_name");
@@ -91,9 +102,74 @@ public class PhotoFolderActivity extends AppCompatActivity implements PhotoFolde
                 }
             }
         }
-
+        
+        // Create and setup adapter
         PhotoFolderAdapter adapter = new PhotoFolderAdapter(folderList, this);
         recyclerView.setAdapter(adapter);
+        
+        // Add long press handler for batch download
+        setupLongPressDownload(adapter);
+    }
+    
+    /**
+     * Setup long press to download entire folder
+     */
+    private void setupLongPressDownload(PhotoFolderAdapter adapter) {
+        // Set long click listener on the adapter
+        adapter.setOnLongClickListener(folderName -> {
+            PhotoFolder folder = findFolderInList(folderName);
+            if (folder != null && folder.images != null && !folder.images.isEmpty()) {
+                downloadFolder(folder);
+                return true;
+            }
+            return false;
+        });
+    }
+    
+    /**
+     * Download entire folder of images
+     */
+    private void downloadFolder(PhotoFolder folder) {
+        // Check WiFi connection
+        if (!NetworkHelper.isWiFiConnected(this)) {
+            Snackbar.make(recyclerView, "WiFi connection required for batch downloads", Snackbar.LENGTH_LONG).show();
+            return;
+        }
+        
+        List<String> imageUrls = folder.images;
+        if (imageUrls == null || imageUrls.isEmpty()) {
+            Snackbar.make(recyclerView, "No images to download", Snackbar.LENGTH_SHORT).show();
+            return;
+        }
+        
+        // Get download destination for logging
+        File downloadDir = resourceManager.getOfflineDirectory(OfflineResourceManager.ResourceType.PHOTO);
+        Log.d(TAG, "📂 User triggered folder download: " + folder.name);
+        Log.d(TAG, "   Images to download: " + imageUrls.size());
+        Log.d(TAG, "   Download location: " + downloadDir.getAbsolutePath());
+        
+        // Start batch download
+        List<Long> downloadIds = downloadManager.downloadFolder(folder.name, imageUrls, true);
+        
+        if (!downloadIds.isEmpty()) {
+            Snackbar.make(recyclerView, 
+                "Downloading " + downloadIds.size() + " images from " + folder.name, 
+                Snackbar.LENGTH_LONG).show();
+        } else {
+            Snackbar.make(recyclerView, "Failed to start downloads", Snackbar.LENGTH_SHORT).show();
+        }
+    }
+    
+    /**
+     * Find folder in current list
+     */
+    private PhotoFolder findFolderInList(String folderName) {
+        for (PhotoFolder folder : folderList) {
+            if (folder.name.equals(folderName)) {
+                return folder;
+            }
+        }
+        return null;
     }
 
     @Override

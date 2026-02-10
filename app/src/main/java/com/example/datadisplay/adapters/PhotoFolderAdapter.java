@@ -17,15 +17,24 @@ public class PhotoFolderAdapter extends RecyclerView.Adapter<PhotoFolderAdapter.
 
     private final List<PhotoFolder> folders;
     private final OnFolderClickListener listener;
+    private OnFolderLongClickListener longClickListener;
 
     // ✅ Change interface to pass only the folder name (lightweight)
     public interface OnFolderClickListener {
         void onFolderClick(String folderName);
     }
+    
+    public interface OnFolderLongClickListener {
+        boolean onFolderLongClick(String folderName);
+    }
 
     public PhotoFolderAdapter(List<PhotoFolder> folders, OnFolderClickListener listener) {
         this.folders = folders;
         this.listener = listener;
+    }
+    
+    public void setOnLongClickListener(OnFolderLongClickListener listener) {
+        this.longClickListener = listener;
     }
 
     @NonNull
@@ -43,6 +52,14 @@ public class PhotoFolderAdapter extends RecyclerView.Adapter<PhotoFolderAdapter.
 
         // ✅ Pass only the folder name
         holder.itemView.setOnClickListener(v -> listener.onFolderClick(folder.name));
+        
+        // Add long click listener for batch download
+        holder.itemView.setOnLongClickListener(v -> {
+            if (longClickListener != null) {
+                return longClickListener.onFolderLongClick(folder.name);
+            }
+            return false;
+        });
     }
 
     @Override

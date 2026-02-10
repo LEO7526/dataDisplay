@@ -35,6 +35,7 @@ import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 import com.example.datadisplay.utils.DataUrlManager;
+import com.example.datadisplay.managers.OfflineDownloadManager;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -84,6 +85,9 @@ public class HomeActivity extends AppCompatActivity {
     
     // Data URL manager
     private DataUrlManager dataUrlManager;
+    
+    // Offline download manager for tracking offline downloads
+    private static OfflineDownloadManager offlineDownloadManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,8 +98,33 @@ public class HomeActivity extends AppCompatActivity {
             // Initialize DataUrlManager
             dataUrlManager = new DataUrlManager(this);
             
+            // Initialize OfflineDownloadManager for global download tracking
+            if (offlineDownloadManager == null) {
+                offlineDownloadManager = new OfflineDownloadManager(this);
+                Log.d(TAG, "✓ OfflineDownloadManager initialized");
+            }
+            
             // Check and request storage permissions (non-blocking)
             Log.d(TAG, "🔐 Checking storage permissions...");
+            
+            // For Android 11+, request MANAGE_EXTERNAL_STORAGE permission
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                if (!android.os.Environment.isExternalStorageManager()) {
+                    Log.d(TAG, "📱 Requesting MANAGE_EXTERNAL_STORAGE permission...");
+                    try {
+                        Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                        intent.setData(Uri.parse("package:" + getPackageName()));
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        Log.e(TAG, "Error requesting storage permission: " + e.getMessage());
+                        Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                        startActivity(intent);
+                    }
+                } else {
+                    Log.d(TAG, "✅ MANAGE_EXTERNAL_STORAGE permission already granted");
+                }
+            }
+            
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 // Android 13+ uses READ_MEDIA_* permissions
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_AUDIO)
@@ -110,15 +139,20 @@ public class HomeActivity extends AppCompatActivity {
                 } else {
                     Log.d(TAG, "✅ All media permissions already granted");
                 }
-            } else {
-                // Android 12 and below
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                // Android 6 to 12
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED ||
+                    ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                         != PackageManager.PERMISSION_GRANTED) {
-                    Log.d(TAG, "📱 Requesting READ_EXTERNAL_STORAGE permission...");
+                    Log.d(TAG, "📱 Requesting READ/WRITE_EXTERNAL_STORAGE permission...");
                     ActivityCompat.requestPermissions(this,
-                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 100);
+                            new String[]{
+                                Manifest.permission.READ_EXTERNAL_STORAGE,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE
+                            }, 100);
                 } else {
-                    Log.d(TAG, "✅ READ_EXTERNAL_STORAGE permission already granted");
+                    Log.d(TAG, "✅ Storage permissions already granted");
                 }
             }
             
@@ -136,6 +170,14 @@ public class HomeActivity extends AppCompatActivity {
                 @Override
                 public void onReceive(Context context, Intent intent) {
                     Log.d(TAG, "📥 Download complete broadcast received");
+                    long downloadId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
+                    
+                    // Notify OfflineDownloadManager for offline content tracking
+                    if (offlineDownloadManager != null && downloadId != -1) {
+                        offlineDownloadManager.onDownloadComplete(downloadId);
+                    }
+                    
+                    // Handle HomeActivity's own downloads
                     onDownloadComplete(intent);
                 }
             };
@@ -377,9 +419,9 @@ public class HomeActivity extends AppCompatActivity {
             request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
             request.setTitle("正在下載 " + filename);
             
-            // 允許在任何网络下下载
-            request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
-            request.setAllowedOverRoaming(true);
+            // WiFi only downloads to save data
+            request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI);
+            request.setAllowedOverRoaming(false);
             
             long downloadId = downloadManager.enqueue(request);
             Log.d(TAG, "✓ Download enqueued with ID: " + downloadId + " for " + filename);
@@ -507,6 +549,12 @@ public class HomeActivity extends AppCompatActivity {
                 navigateToCategory("mp3_data.json", RadioCategoryActivity.class, "MP3");
             } else if (id == R.id.nav_comics) {
                 navigateToCategory("comic_data.json", ComicCategoryActivity.class, "comic");
+            } else if (id == R.id.nav_offline) {
+                startActivity(new Intent(this, OfflineContentActivity.class));
+                drawerLayout.closeDrawers();
+            } else if (id == R.id.nav_cached_files) {
+                startActivity(new Intent(this, CachedFilesActivity.class));
+                drawerLayout.closeDrawers();
             }
             return true;
         });
