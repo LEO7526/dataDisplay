@@ -1,0 +1,64 @@
+<resources>
+    <string name="app_name">DataDisplay</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <!-- General labels -->
+    <string name="soundtrack_title">Soundtrack Title</string>
+    <string name="duration_label">Duration: %1$s</string>
+    <string name="time_placeholder">00:00</string>
+
+    <!-- Content descriptions for accessibility -->
+    <string name="play_pause">Play or Pause</string>
+    <string name="loop">Loop</string>
+    <string name="shuffle">Shuffle</string>
+
+    <!-- Toast messages -->
+    <string name="looping_enabled">Looping enabled</string>
+    <string name="looping_disabled">Looping disabled</string>
+    <string name="shuffle_on">Shuffle mode ON</string>
+    <string name="shuffle_off">Shuffle mode OFF</string>
+    <string name="playback_error">Playback error</string>
+    <string name="shuffle_error">Shuffle error</string>
+    <string name="error_parsing_json">Error parsing mp3_data.json</string>
+    <string name="error_loading_categories">Error loading categories</string>
+    <string name="no_json_found">No mp3_data.json found in cache</string>
+
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="comic_page">Comic page</string>
+
+
+    <string name="unlock_zoom">Zoom</string>
+
+    <!-- Navigation header -->
+    <string name="nav_header_title">Data Display</string>
+    <string name="nav_header_subtitle">Content Management</string>
+    <string name="nav_header_desc">Navigation header</string>
+
+    <string name="games_title">Games</string>
+    <string name="games_subtitle">Choose a game to play offline.</string>
+    <string name="snake_game_title">Snake</string>
+    <string name="snake_game_desc">Classic offline snake with swipe + arrows.</string>
+    <string name="snake_title">Snake</string>
+    <string name="snake_start_game">Start Game</string>
+    <string name="snake_high_score_text">High Score: %1$d</string>
+    <string name="snake_score_text">Score: %1$d</string>
+    <string name="snake_main_menu">Main Menu</string>
+    <string name="snake_controls_hint">Swipe on canvas or use arrow buttons</string>
+    <string name="snake_game_over">Game Over! Score: %1$d</string>
+    <string name="snake_new_high_score">New High Score: %1$d</string>
+    <string name="snake_up">↑</string>
+    <string name="snake_down">↓</string>
+    <string name="snake_left">←</string>
+    <string name="snake_right">→</string>
+    <string name="tictactoe_game_title">Tic-Tac-Toe</string>
+    <string name="tictactoe_game_desc">Popular offline 2-player classic.</string>
+    <string name="tictactoe_title">Tic-Tac-Toe</string>
+    <string name="tictactoe_turn_text">Player %1$s turn</string>
+    <string name="tictactoe_win_text">Player %1$s wins!</string>
+    <string name="tictactoe_draw_text">Draw game</string>
+    <string name="tictactoe_restart">Restart</string>
+
+</resources>

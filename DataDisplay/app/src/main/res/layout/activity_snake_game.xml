@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/snake_title"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:id="@+id/menuContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/txtSnakeHighScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnSnakeStart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/snake_start_game" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/gameplayContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/txtSnakeScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="@string/snake_controls_hint"
+            android:textSize="13sp" />
+
+        <com.example.datadisplay.SnakeGameView
+            android:id="@+id/snakeGameView"
+            android:layout_width="match_parent"
+            android:layout_height="420dp"
+            android:layout_marginTop="12dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btnSnakeUp"
+                android:layout_width="64dp"
+                android:layout_height="48dp"
+                android:text="@string/snake_up"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnSnakeLeft"
+                    android:layout_width="64dp"
+                    android:layout_height="48dp"
+                    android:text="@string/snake_left"
+                    android:textSize="20sp" />
+
+                <Button
+                    android:id="@+id/btnSnakeDown"
+                    android:layout_width="64dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/snake_down"
+                    android:textSize="20sp" />
+
+                <Button
+                    android:id="@+id/btnSnakeRight"
+                    android:layout_width="64dp"
+                    android:layout_height="48dp"
+                    android:text="@string/snake_right"
+                    android:textSize="20sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnSnakeMainMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/snake_main_menu" />
+    </LinearLayout>
+
+</LinearLayout>
